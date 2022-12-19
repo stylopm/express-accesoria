@@ -15,9 +15,7 @@ app.listen(process.env.PORT, () => {
   console.log(
     `\x1b[34m **  Se levanta la API en el puerto ${process.env.PORT}  ** \x1b[0m`
   );
-  console.log(
-    `\x1b[34m **  Version 2  ** \x1b[0m`
-  );
+  console.log(`\x1b[34m **  Version 2  ** \x1b[0m`);
   console.log("\x1b[34m ******************************************* \x1b[0m");
 });
 
@@ -27,4 +25,4 @@ app.get("/", (req, res) => {
   res.send("Hola estan en mi api");
 });
 
-app.use('/users', require('./routes/users.routes'));
+app.use("/users", require("./routes/users.routes"));
