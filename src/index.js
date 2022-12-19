@@ -1,20 +1,21 @@
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const book = require('./models/userShema');
-const { dbConnection } = require('./config/db');
+const book = require("./models/userShema");
+const { dbConnection } = require("./config/db");
 const app = express();
 app.use(bodyParser.json());
-app.use(express.json())
+app.use(express.json());
 
 let db = require("./database/db");
-dbConnection()
-
+dbConnection();
 // Levanto el servidor
 app.listen(process.env.PORT, () => {
-  console.log('\x1b[34m ******************************************* \x1b[0m');
-  console.log(`\x1b[34m **  Se levanta la API en el puerto ${process.env.PORT}  ** \x1b[0m`);
-  console.log('\x1b[34m ******************************************* \x1b[0m');
+  console.log("\x1b[34m ******************************************* \x1b[0m");
+  console.log(
+    `\x1b[34m **  Se levanta la API en el puerto ${process.env.PORT}  ** \x1b[0m`
+  );
+  console.log("\x1b[34m ******************************************* \x1b[0m");
 });
 
 // localhost:5000
@@ -96,7 +97,6 @@ app.delete("/users/:id", (req, res) => {
   }
 });
 
-
 // localhost:5000/address/1
 app.delete("/address/:id", (req, res) => {
   const found = db.address.find(
@@ -111,7 +111,6 @@ app.delete("/address/:id", (req, res) => {
     respApi(res, "Success", db.address);
   }
 });
-
 
 // Funcion general para la parte de respuesta
 const respApi = (res, msg, data) => {
