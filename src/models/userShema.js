@@ -7,12 +7,9 @@ const userSchema = mongoose.Schema(
     dob: { type: Date },
     email: { type: String },
     password: {type: String}
-  },
-  // {
-  //   timestamps: true,
-  // }
+  }
 );
 
-const Book = mongoose.model('user', userSchema)
+const User = mongoose.model('user', userSchema)
 
-module.exports = Book
+module.exports = User

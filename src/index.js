@@ -1,14 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const book = require("./models/userShema");
+const cors = require("cors");
+const User = require("./models/userShema");
 const { dbConnection } = require("./config/db");
 const app = express();
+
 app.use(bodyParser.json());
 app.use(express.json());
-
-let db = require("./database/db");
+app.use(cors());
 dbConnection();
+let db = require("./database/db");
 // Levanto el servidor
 app.listen(process.env.PORT, () => {
   console.log("\x1b[34m ******************************************* \x1b[0m");
@@ -25,8 +27,16 @@ app.get("/", (req, res) => {
 });
 
 // localhost:5000/users
-app.get("/users", (req, res) => {
-  respApi(res, "Success", db.users);
+app.get("/users", async (req, res) => {
+  try {
+    msgFormatCons("Lista de usuarios");
+    const users = await User.find({});
+    respApi(res, "Success", users);
+  } catch {
+    res.status(500).json({
+      msg: "Hubo un error al obtener los datos",
+    });
+  }
 });
 
 // localhost:5000/users
@@ -126,4 +136,10 @@ const respApiError = (res, msg, status) => {
   res.status(status).json({
     msg: msg,
   });
+};
+
+const msgFormatCons = (msj) => {
+  console.log("\x1b[33m ************************\x1b[0m");
+  console.log(`\x1b[33m ${msj}\x1b[0m`);
+  console.log("\x1b[33m ************************\x1b[0m");
 };
