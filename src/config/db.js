@@ -1,18 +1,17 @@
-const mongoose = require('mongoose');
-
+require("dotenv").config();
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 const dbConnection = async () => {
   try {
-    await mongoose.connect('mongodb://stylopm:test99@ac-fxdkwvr-shard-00-00.wpih3we.mongodb.net:27017,ac-fxdkwvr-shard-00-01.wpih3we.mongodb.net:27017,ac-fxdkwvr-shard-00-02.wpih3we.mongodb.net:27017/test?replicaSet=atlas-2bkdmf-shard-0&ssl=true&authSource=admin');
-    console.log('run DB');
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("\x1b[32m ********************************** \x1b[0m");
+    console.log("\x1b[32m **  Conexión exitosa a la base! ** \x1b[0m");
+    console.log("\x1b[32m ********************************** \x1b[0m");
   } catch (e) {
-    console.log('error connection');
-    console.log(e);
-    throw new Error('Error al conectar a la DB');
+    console.log("\x1b[31m *********************** \x1b[0m");
+    console.log("\x1b[31m **  error connection ** \x1b[0m");
+    console.log("\x1b[31m *********************** \x1b[0m");
   }
 };
 
 module.exports = { dbConnection };
-    
-    
-  
-  
