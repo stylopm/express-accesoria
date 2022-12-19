@@ -5,7 +5,7 @@ const cors = require("cors");
 const User = require("./models/userShema");
 const { dbConnection } = require("./config/db");
 const app = express();
-
+// middlewares
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
@@ -40,85 +40,46 @@ app.get("/users", async (req, res) => {
 });
 
 // localhost:5000/users
-app.post("/users", (req, res) => {
-  db.users.push(req.body);
-  respApi(res, "Success", db.users);
-});
-
-// localhost:5000/address
-app.post("/address", (req, res) => {
-  db.address.push(req.body);
-  respApi(res, "Success", db.address);
-});
-
-// localhost:5000/address
-app.get("/address", (req, res) => {
-  respApi(res, "Success", db.address);
-});
-
-// localhost:5000/address/1
-app.put("/address/:id", (req, res) => {
-  const found = db.address.find(
-    (element) => parseInt(element.id) === parseInt(req.params.id)
-  );
-  if (!found) {
-    respApiError(res, "El id no existe", 400);
-  } else {
-    db.address = db.address.map((element) => {
-      if (parseInt(element.id) === parseInt(req.params.id)) {
-        element.address = req.body.address;
-      }
-      return element;
+app.post("/users", async (req, res) => {
+  try {
+    msgFormatCons("Creación de usuario");
+    db.users.push(req.body);
+    const user = await User.create(req.body);
+    respApi(res, "Success", user);
+  } catch {
+    res.status(500).json({
+      msg: "Hubo un error al obtener los datos",
     });
-    respApi(res, "Success", db.address);
   }
 });
 
 // localhost:5000/users/1
-app.put("/users/:id", (req, res) => {
-  const found = db.users.find(
-    (element) => parseInt(element.id) === parseInt(req.params.id)
-  );
-  if (!found) {
-    respApiError(res, "El id no existe", 400);
-  } else {
-    db.users = db.users.map((element) => {
-      if (parseInt(element.id) === parseInt(req.params.id)) {
-        element.user_name = req.body.name;
-      }
-      return element;
+app.put("/users/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    msgFormatCons("Actualización de usuario");
+    const newUpdate = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
     });
-    respApi(res, "Success", db.users);
+    respApi(res, "Success", newUpdate);
+  } catch {
+    res.status(500).json({
+      msg: "Hubo un error al actualizar el usuario",
+    });
   }
 });
 
 // localhost:5000/users/1
-app.delete("/users/:id", (req, res) => {
-  const found = db.users.find(
-    (element) => parseInt(element.id) === parseInt(req.params.id)
-  );
-  if (!found) {
-    respApiError(res, "El id no existe", 400);
-  } else {
-    db.users = db.users.filter(
-      (element) => parseInt(element.id) !== parseInt(req.params.id)
-    );
-    respApi(res, "Success", db.users);
-  }
-});
-
-// localhost:5000/address/1
-app.delete("/address/:id", (req, res) => {
-  const found = db.address.find(
-    (element) => parseInt(element.id) === parseInt(req.params.id)
-  );
-  if (!found) {
-    respApiError(res, "El id no existe", 400);
-  } else {
-    db.address = db.address.filter(
-      (element) => parseInt(element.id) !== parseInt(req.params.id)
-    );
-    respApi(res, "Success", db.address);
+app.delete("/users/:id", async (req, res) => {
+  try {
+    console.log(req.params.id);
+    msgFormatCons("Eliminar usuario");
+    const newUpdate = await User.findByIdAndRemove({ _id: req.params.id });
+    respApi(res, "Success", newUpdate);
+  } catch {
+    res.status(500).json({
+      msg: "Hubo un error al actualizar el usuario",
+    });
   }
 });
 
@@ -139,7 +100,5 @@ const respApiError = (res, msg, status) => {
 };
 
 const msgFormatCons = (msj) => {
-  console.log("\x1b[33m ************************\x1b[0m");
   console.log(`\x1b[33m ${msj}\x1b[0m`);
-  console.log("\x1b[33m ************************\x1b[0m");
 };
