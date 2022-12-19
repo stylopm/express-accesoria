@@ -1,19 +1,20 @@
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require('cors')
-const book = require('./models/modelBook');
+const book = require('./models/userShema');
 const { dbConnection } = require('./config/db');
 const app = express();
 app.use(bodyParser.json());
-app.use(cors())
 app.use(express.json())
-require('dotenv').config()
-const port = 5000;
+
 let db = require("./database/db");
 dbConnection()
+
 // Levanto el servidor
-app.listen(port, () => {
-  console.log("Se levanta mi api en el puerto " + process.env.PORT);
+app.listen(process.env.PORT, () => {
+  console.log('\x1b[34m ******************************************* \x1b[0m');
+  console.log(`\x1b[34m **  Se levanta la API en el puerto ${process.env.PORT}  ** \x1b[0m`);
+  console.log('\x1b[34m ******************************************* \x1b[0m');
 });
 
 // localhost:5000
